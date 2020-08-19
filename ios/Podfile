@@ -20,6 +20,7 @@ target 'ListGrid' do
   use_flipper!
   post_install do |installer|
     flipper_post_install(installer)
+    system("sed -i '' '/s.resources/d' ../node_modules/react-native-vector-icons/RNVectorIcons.podspec")
   end
 end
 
