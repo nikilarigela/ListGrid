@@ -1,10 +1,17 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
+import { Platform, UIManager } from 'react-native';
 import HomeScreen from './screens/Home';
 import SplashScreen from './screens/Splash';
 
 const Stack = createStackNavigator();
+
+if (Platform.OS === 'android') {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const AppNavigator = () => {
   const [fetching, setFetching] = useState(true);

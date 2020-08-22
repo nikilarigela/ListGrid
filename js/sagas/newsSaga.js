@@ -10,7 +10,10 @@ function* newsWorker(action) {
   try {
     const { data = {} } = yield call(get, `?count=10&offset=${action.payload}`);
     console.log(data);
-    yield put({ type: REQUEST_NEWS_SUCCESS, payload: { data } });
+    yield put({
+      type: REQUEST_NEWS_SUCCESS,
+      payload: { data: data?.data || [], offset: action.payload },
+    });
   } catch (e) {
     console.log(e.message);
     yield put({ type: REQUEST_NEWS_FAILED, payload: { error: 'failed' } });

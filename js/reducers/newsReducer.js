@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   REQUEST_NEWS,
   REQUEST_NEWS_FAILED,
@@ -8,6 +9,7 @@ const initialState = {
   data: [],
   loading: false,
   error: null,
+  offset: 0,
 };
 
 function profileReducer(state = initialState, action) {
@@ -18,10 +20,18 @@ function profileReducer(state = initialState, action) {
       return { ...state, loading: false, error: action.payload.error };
     }
     case REQUEST_NEWS_SUCCESS: {
+      let data = [];
+      const { offset } = action.payload;
+      if (offset === 0) {
+        data = action.payload.data;
+      } else {
+        data = _.uniq([...state.data, ...action.payload.data], '_id');
+      }
       return {
         ...state,
         loading: false,
-        data: [...state.data, action.payload.data],
+        data,
+        offset,
       };
     }
     default:
