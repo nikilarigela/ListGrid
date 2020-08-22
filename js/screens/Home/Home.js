@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FlatList, LayoutAnimation, RefreshControl, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { ListItem, Toggle } from '../../components';
@@ -8,7 +8,9 @@ const HomeScreen = ({ navigation }) => {
   const { loading, error, data, offset } = useSelector((state) => state.news);
   const [numberofCols, setNumberofCols] = useState(1);
   const [expandedId, setExpandedId] = useState('');
+  const [scrollPosition, setScrollPostion] = useState(0);
   const dispatch = useDispatch();
+  const flatlistRef = useRef();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -16,10 +18,14 @@ const HomeScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
-  const onExpand = (id) => {
+  const animate = () => {
     LayoutAnimation.configureNext(
-      LayoutAnimation.create(300, 'easeInEaseOut', 'opacity'),
+      LayoutAnimation.create(200, 'easeInEaseOut', 'opacity'),
     );
+  };
+
+  const onExpand = (id) => {
+    animate();
     setExpandedId(expandedId === id ? '' : id);
   };
 
@@ -43,18 +49,29 @@ const HomeScreen = ({ navigation }) => {
   };
 
   const onTogglePress = () => {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(200, 'easeInEaseOut', 'opacity'),
-    );
+    animate();
     setNumberofCols(numberofCols === 1 ? 2 : 1);
+    console.log(scrollPosition);
+    setTimeout(
+      () =>
+        flatlistRef.current.scrollToOffset({
+          offset: scrollPosition,
+          animated: false,
+        }),
+      0,
+    );
   };
 
   const onSidesPress = (numOfCol) => {
-    LayoutAnimation.configureNext(
-      LayoutAnimation.create(200, 'easeInEaseOut', 'opacity'),
-    );
+    animate();
     setNumberofCols(numOfCol);
   };
+
+  const onScroll = (e) => {
+    setScrollPostion(e.nativeEvent.contentOffset.y);
+  };
+
+  console.log(scrollPosition);
 
   return (
     <View style={{ flex: 1 }}>
@@ -69,11 +86,13 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
       <FlatList
+        ref={flatlistRef}
         refreshControl={
           <RefreshControl onRefresh={onRefresh} refreshing={loading} />
         }
         style={{ flex: 1, padding: 16 }}
         data={data}
+        onScroll={onScroll}
         extraData={expandedId}
         renderItem={renderItem}
         numColumns={numberofCols}
