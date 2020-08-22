@@ -51,7 +51,6 @@ const HomeScreen = ({ navigation }) => {
   const onTogglePress = () => {
     animate();
     setNumberofCols(numberofCols === 1 ? 2 : 1);
-    console.log(scrollPosition);
     setTimeout(
       () =>
         flatlistRef.current.scrollToOffset({
@@ -70,8 +69,6 @@ const HomeScreen = ({ navigation }) => {
   const onScroll = (e) => {
     setScrollPostion(e.nativeEvent.contentOffset.y);
   };
-
-  console.log(scrollPosition);
 
   return (
     <View style={{ flex: 1 }}>
