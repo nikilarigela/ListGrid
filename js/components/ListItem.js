@@ -11,6 +11,7 @@ const ListItem = ({ item, onExpand, expandedId, isGrid }) => {
         marginVertical: 8,
         borderRadius: 10,
         padding: 12,
+        elevation: 3,
         shadowColor: '#000000',
         shadowOffset: {
           width: 0,
