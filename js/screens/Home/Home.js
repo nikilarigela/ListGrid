@@ -4,11 +4,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ListItem, Toggle } from '../../components';
 import { REQUEST_NEWS } from '../../constants/actions';
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const { loading, error, data, offset } = useSelector((state) => state.news);
   const [numberofCols, setNumberofCols] = useState(1);
   const [expandedId, setExpandedId] = useState('');
   const dispatch = useDispatch();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: 'News',
+    });
+  }, [navigation]);
 
   const onExpand = (id) => {
     LayoutAnimation.configureNext(
