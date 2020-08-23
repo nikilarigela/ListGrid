@@ -48,22 +48,27 @@ const HomeScreen = ({ navigation }) => {
     dispatch({ type: REQUEST_NEWS, payload: 0 });
   };
 
-  const onTogglePress = () => {
-    animate();
-    setNumberofCols(numberofCols === 1 ? 2 : 1);
+  const scrollToPosition = (position) => {
     setTimeout(
       () =>
         flatlistRef.current.scrollToOffset({
-          offset: scrollPosition,
+          offset: position,
           animated: false,
         }),
       0,
     );
   };
 
+  const onTogglePress = () => {
+    animate();
+    setNumberofCols(numberofCols === 1 ? 2 : 1);
+    scrollToPosition(scrollPosition);
+  };
+
   const onSidesPress = (numOfCol) => {
     animate();
     setNumberofCols(numOfCol);
+    scrollToPosition(scrollPosition);
   };
 
   const onScroll = (e) => {
